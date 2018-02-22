@@ -1,0 +1,156 @@
+<style lang="less">
+   .bg{
+        background: #f5f5f5;
+        min-height: 100%;
+        box-sizing: border-box;
+    }
+  .iphonex{
+    padding-bottom: 50rpx;
+    .form-card{
+      bottom: 150rpx;
+    }
+  }
+  .bg-wrap3{
+      position: relative;
+      margin-top: 60rpx;
+      background: #fff;
+      .title{
+          display: inline;
+          padding: 5px 20px;
+          background: #93b3f7;
+          border-radius: 15px;
+          color: #fff;
+          position: absolute;
+          left: 50%;
+          transform: translate(-50%,-50%);
+          top: 0;
+          font-size: 30rpx;
+      }
+      .text-wrap{
+          padding: 20rpx 40rpx 20rpx 80rpx;
+          
+          .text-title{
+              font-size: 32rpx;
+              position: relative;
+              .dot{
+                  width: 10rpx;
+                  height: 10rpx;
+                  border-radius: 50%;
+                  border: 2px solid #93b3f7;
+                  position: absolute;
+                  left:-30rpx;
+                  top:14rpx;
+
+              }
+          }
+          .text-content{
+              margin-top: 20rpx;
+              color: #999;
+              font-size: 30rpx;
+              .sub-title{
+                  color: #444;
+              }
+              .sub-title:not(:first-child){
+                  margin-top: 20rpx;
+              }
+          }
+      }
+  }
+  .button-wrap{
+      margin-top: 40rpx;
+      display: flex;
+      padding: 0 30rpx;
+      button{
+          width: 100%;
+          background: linear-gradient(to bottom right, #93b3f7 , #797fe9);
+      }
+      .button{
+          background: #93bdf7;
+          color: #fff;
+      }
+  }
+</style>
+<template>
+  <view class="bg {{deviceInfo=='iPhone X'?'iphonex':''}}">
+      <view class="bg-wrap3">
+          <view class="text-wrap">
+              <view class="text-title">
+                  <view class="dot"></view>指数解读
+              </view>
+              <view class="text-content">
+                  <view class="sub-title">
+                      亲密度（46.32分）
+                  </view>
+                  <view>
+                      用手用心做出的设计，每天都能投身于美的怀抱！
+                  </view>
+                  <view class="sub-title">
+                      亲密度（46.32分）
+                  </view>
+                  <view>
+                      用手用心做出的设计，每天都能投身于美的怀抱！
+                  </view>
+                  <view class="sub-title">
+                      亲密度（46.32分）
+                  </view>
+                  <view>
+                      用手用心做出的设计，每天都能投身于美的怀抱！
+                  </view>
+                  <view class="sub-title">
+                      亲密度（46.32分）
+                  </view>
+                  <view>
+                      用手用心做出的设计，每天都能投身于美的怀抱！
+                  </view>
+                  <view class="sub-title">
+                      亲密度（46.32分）
+                  </view>
+                  <view>
+                      用手用心做出的设计，每天都能投身于美的怀抱！
+                  </view>
+              </view>
+          </view>
+      </view>
+
+      <view class="button-wrap">
+          <button class="button" bindtap="goIndex">我也要测</button>
+      </view>
+  </view>
+</template>
+
+<script>
+  import wepy from 'wepy'
+
+
+  export default class Index extends wepy.page {
+    config = {
+      navigationBarTitleText: '职业定位评测'
+    }
+    components = {
+    }
+
+
+    data = {
+      deviceInfo:null,
+      userInfo:null,
+    }
+
+    methods = {
+      
+    }
+
+    events = {
+    }
+
+    onLoad() {
+      this.deviceInfo=this.$parent.globalData.deviceInfo
+      this.userInfo=this.$parent.globalData.userInfo
+    }
+
+    goIndex(){
+        wx.navigateTo({
+            url: 'index'
+        })
+    }
+  }
+</script>

@@ -1,0 +1,382 @@
+<style lang="less">
+page{height:100%;overflow: hidden}
+.we-slide {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  // color: #fff;
+  font-size: 2rem;
+  background-color: #CA4040;
+}
+.card-box {
+    height: 100%;
+    display: flex;
+    flex-wrap:nowrap;
+    background-color: #f5f5f5;
+    position: relative;
+    overflow: hidden;
+}
+.card {
+  width: 100%;
+  height: 100%;
+  flex-shrink:0;
+  position: absolute;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+}
+.card.enter{
+    transform: translateX(100%);
+    z-index:-1;
+}
+.card.current{
+    transition: transform 0.4s ease-in-out;
+    z-index:9999;
+}
+.card.leave{
+    transition: transform 0.4s ease-in-out;
+    transform: scale(0.8);
+    z-index: 9998;
+}
+.card.leave-prev{
+    transition: transform 0.4s ease-in-out;
+    transform: translateX(100%);
+    z-index: 10000;
+}
+.card.leave-prev-end{
+    z-index: -1;
+}
+.card.enter-prev{
+    transition: transform 0.4s ease-in-out;
+    transform: scale(0.6);
+    z-index: -1;
+}
+.progress-wrap{
+    position: fixed;
+    width: 100%;
+    bottom: 50rpx;
+    left: 0;
+    z-index: 10000;
+    padding: 0 10%;
+    box-sizing: border-box;
+    .progress{
+        width: 100%;
+    }
+    view{
+        width: 100%;
+        text-align: center;
+    }
+    span{
+        font-size: 12px;
+        color: #999;
+    }
+}
+.card-body{
+    position: relative;
+    width: 70%;
+    height: 60%;
+    border: 1px solid #eee;
+    border-radius: 10px;
+    background: #fff;
+    margin-top: -10%;
+    box-shadow: 1px 8px 15px 1px 
+            rgba(147, 179, 247, 0.26);
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    color:#555;
+    overflow: hidden;
+    padding: 60rpx;
+    .horn{
+        position: absolute;
+        left: -100rpx;
+        top:-100rpx;
+        background: #93b3f7;
+        width: 200rpx;
+        height: 200rpx;
+        border-radius: 50%;
+        span{
+            position: absolute;
+            bottom: 30rpx;
+            right: 30rpx;
+            color: #fff;
+        }
+    }
+    .button-wrap{
+        width: 100%;
+        margin: 20rpx 0;
+        .button{
+            width: 100%;
+            border-radius: 50rpx;
+            border: 1px solid #93b3f7;
+            text-align: center;
+            padding: 20rpx;
+            color: #93b3f7;
+        }
+        .button.mini{
+            padding: 14rpx;
+        }
+        .button.active{
+            background: #93b3f7;
+            color: #fff;
+        }
+    }
+    .text-wrap{
+        width: 100%;
+        margin-bottom: 90rpx;
+        margin-top: 100rpx;
+    }
+}
+.iphonex{
+    .progress-wrap{
+        bottom: 100rpx;
+    }
+    padding-bottom: 50rpx;
+}
+</style>
+<template>
+    <view class="card-box {{deviceInfo=='iPhone X'?'iphonex':''}}" bindtouchstart="touchstart" bindtouchmove="touchmove">
+         <view class="card {{card1}}">
+            <view class="card-body">
+                <view class="horn">
+                    <span>{{questions.current.id}}</span>
+                </view>
+                <view class="text-wrap">
+                    <text>{{questions.current.title}}</text>
+                </view>
+                <view class="button-wrap" wx:for="{{questions.current.options}}" wx:key="{{item.id}}">
+                    <view class="button {{questions.current.options.length>2?'mini':''}} {{questions.current.answerId==item.id?'active':''}}" bindtap="setAnswer({{item.id}})">
+                        {{item.title}}
+                    </view>
+                    <!-- <button class="button" size="{{questions.current.options.length>2?'mini':'default'}}" plain="true">{{item.title}}</button> -->
+                </view>
+            </view>
+        </view>
+        
+        <view class="card {{card2}}">
+            <view class="card-body">
+                <view class="horn">
+                    <span>{{questions.next.id}}</span>
+                </view>
+                <view class="text-wrap">
+                    <text>{{questions.next.title}}</text>
+                </view>
+                <view class="button-wrap" wx:for="{{questions.next.options}}" wx:key="{{item.id}}">
+                    <view class="button {{questions.next.options.length>2?'mini':''}} {{questions.next.answerId==item.id?'active':''}}" bindtap="setAnswer({{item.id}})">
+                        {{item.title}}
+                    </view>
+                    <!-- <button class="button" plain="true">{{item.title}}</button> -->
+                </view>
+            </view>
+        </view>
+        <view class="card {{card3}}">
+            <view class="card-body">
+                <view class="horn">
+                    <span>{{questions.prev.id}}</span>
+                </view>
+                <view class="text-wrap">
+                    <text>{{questions.prev.title}}</text>
+                </view>
+                <view class="button-wrap" wx:for="{{questions.prev.options}}" wx:key="{{item.id}}">
+                    <view class="button {{questions.prev.options.length>2?'mini':''}} {{questions.prev.answerId==item.id?'active':''}}" bindtap="setAnswer({{item.id}})">
+                        {{item.title}}
+                    </view>
+                    <!-- <button class="button" plain="true">{{item.title}}</button> -->
+                </view>
+            </view>
+        </view>
+        <view class="progress-wrap">
+            <progress class="progress" percent="{{questions.progress}}" stroke-width="3" color="#93b3f7" />
+            <view>
+                <span>{{questions.currentIndex+1}}/{{questions.data.length}}</span>
+            </view>
+        </view>
+        
+    </view>
+</template>
+
+<script>
+import wepy from 'wepy';
+import * as api from '../api/api.js'
+export default class Index extends wepy.page {
+  config = {
+    navigationBarTitleText: '职业定位评测'
+  };
+  components = {};
+
+  data = {
+    card1:'current',
+    card2:'enter',
+    card3:'leave',
+    touchX:0,
+    move:false,
+    deviceInfo:null,
+    questions:{
+        data:[],
+        currentIndex:0,
+        prev:{},
+        current:{},
+        next:{},
+        progress:0
+    },
+    form:{
+        userTest:{
+            userTestId:null,
+            answers:[]
+        }
+    }
+  };
+  onLoad() {
+      this.deviceInfo=this.$parent.globalData.deviceModel
+      this.questions.data=this.$parent.globalData.questions
+      this.questions.current=this.questions.data[0]
+  }
+  onShow() {}
+  nextPage(){
+      this.move=true
+      setTimeout(() => {
+          this.move=false
+      }, 400);
+      if(this.questions.currentIndex>=this.questions.data.length-1){
+          return false
+      }
+      this.questions.currentIndex++
+      this.questions.progress=(this.questions.currentIndex/this.questions.data.length)*100
+      this.setQuestions(this.questions.currentIndex)
+      if(this.card1=='current'){
+          this.card1='leave'
+          this.card2='current'
+          this.card3='enter'
+          this.questions.current=this.questions.data[this.questions.currentIndex-1]
+          this.questions.next=this.questions.data[this.questions.currentIndex]
+          return false
+      }
+      if(this.card2=='current'){
+          this.card1='enter'
+          this.card2='leave'
+          this.card3='current'
+          this.questions.next=this.questions.data[this.questions.currentIndex-1]
+          this.questions.prev=this.questions.data[this.questions.currentIndex]
+          return false
+      }
+      if(this.card3=='current'){
+          this.card1='current'
+          this.card2='enter'
+          this.card3='leave'
+          this.questions.prev=this.questions.data[this.questions.currentIndex-1]
+          this.questions.current=this.questions.data[this.questions.currentIndex]
+          return false
+      }
+  }
+  prevPage(){
+      var that=this
+      this.move=true
+      setTimeout(() => {
+          this.move=false
+      }, 400);
+      if(this.questions.currentIndex==0){
+          return false
+      }
+      this.questions.currentIndex--
+      this.setQuestions(this.questions.currentIndex)
+      if(this.card1=='current'){
+          this.card1='leave-prev'
+          this.card2='enter-prev'
+          this.card3='current'
+          this.questions.prev=this.questions.data[this.questions.currentIndex]
+          this.questions.current=this.questions.data[this.questions.currentIndex+1]
+          return false
+      }
+      if(this.card2=='current'){
+          this.card1='current'
+          this.card2='leave-prev'
+          this.card3='enter-prev'
+          this.questions.prev=this.questions.data[this.questions.currentIndex]
+          this.questions.next=this.questions.data[this.questions.currentIndex+1]
+          return false
+      }
+      if(this.card3=='current'){
+          this.card1='enter-prev'
+          this.card2='current'
+          this.card3='leave-prev'
+          this.questions.current=this.questions.data[this.questions.currentIndex]
+          this.questions.prev=this.questions.data[this.questions.currentIndex+1]
+          return false
+      }
+  }
+  touchstart(e){
+      this.touchX=e.touches[0].pageX
+  }
+  touchmove(e){
+      if(this.touchX){
+          var move=Math.abs(e.touches[0].pageX-this.touchX)
+          var move2=e.touches[0].pageX-this.touchX
+          if(move>50){
+              if(move2>0){
+                  if(!this.move){
+                      if(this.$parent.globalData.allowGoBack){
+                          this.prevPage()
+                      }
+                  }
+              }else{
+                  if(!this.move){
+                      if(this.$parent.globalData.allowSkip){
+                          this.nextPage()
+                      }
+                  }
+                
+              }
+          }
+      }
+  }
+  setQuestions(i){
+      this.questions.prev=this.questions.data[i+1]
+      this.questions.current=this.questions.data[i]
+      this.questions.next=this.questions.data[i-1]
+  }
+  setAnswer(e){
+      let i=this.questions.currentIndex
+      this.questions.data[i].answerId=e.currentTarget.dataset.wpysetanswerA
+      this.nextPage()
+      if(i==this.questions.data.length-1){
+          this.getAllAnswer()
+          let that=this
+          wx.showModal({
+            title: '提示',
+            content: '已经答完最后一题，是否提交？',
+            cancelText:'再看看',
+            confirmText:'提交',
+            success: function(res) {
+              if (res.confirm) {
+                that.submit()
+              } else if (res.cancel) {
+                console.log('用户点击取消')
+              }
+            }
+          })
+      }
+  }
+  getAllAnswer(){
+      this.form.userTest.userTestId=this.$parent.globalData.userTestId
+      this.form.userTest.answers=this.questions.data.map((item)=>{
+          return {
+              questionId:item.id,
+              optionId:item.answerId
+          }
+      })
+  }
+  submit(){
+      wx.showLoading({
+          title: '提交答案...',
+      })
+      api.committest(this.form,(res)=>{
+          wx.hideLoading()
+          if(res.data.success){
+              wx.navigateTo({
+                url: 'complate'
+              })
+          }
+      })
+  }
+}
+</script>

@@ -1,0 +1,134 @@
+<style lang="less">
+  .bg-wrap{
+    height: 100%;
+    width: 100%;
+  }
+  .button-wrap{
+    position: absolute;
+    bottom: 0;
+    left: 0;
+    width: 100%;
+    .button{
+      background: #93b3f7;
+      border-radius: 0;
+      color: #fff;
+    }
+  }
+  .iphonex{
+    .button-wrap{
+      button{
+        padding-bottom: 50rpx;
+      }
+    }
+  }
+</style>
+<template>
+  <view class="container {{deviceInfo=='iPhone X'?'iphonex':''}}">
+    <image class="bg-wrap" src="{{coverImage}}"></image>
+    <view class="button-wrap">
+      <button class="button" bindtap="startDati">开始评测</button>
+    </view>
+  </view>
+</template>
+
+<script>
+  import wepy from 'wepy'
+  import * as api from '../api/api.js'
+
+  export default class Index extends wepy.page {
+    config = {
+      navigationBarTitleText: '职业定位评测'
+    }
+    components = {
+    }
+
+
+    data = {
+      deviceInfo:null,
+      coverImage:wx.getStorageSync('coverImageUrl'),
+      again:false
+    }
+
+    methods = {
+      
+    }
+
+    events = {
+    }
+    onLoad(params) {
+      if(params&&params.again=='true'){
+        this.again=true
+      }
+      this.deviceInfo=this.$parent.globalData.deviceModel
+      this.login()
+    }
+
+    startDati(){
+      if(this.$parent.globalData.testId){
+        wx.showLoading({
+          title: '获取测试题目...',
+        })
+        api.starttest({
+          testId:this.$parent.globalData.testId
+        },(res)=>{
+          wx.hideLoading()
+          if(res.data.result.userTestId){
+            this.$parent.globalData.userTestId=res.data.result.userTestId
+            wx.navigateTo({
+              url: 'dati'
+            })
+          }
+        })
+        
+      }
+    }
+
+    login(){
+      let that=this
+      wx.login({
+        success: function(res) {
+          if(res.code){
+            that.$parent.globalData.userCode = res.code
+            api.wxlogin({code:that.$parent.globalData.userCode},(res)=>{
+              if(res.data.result.user.hasSavedName){
+                that.$parent.globalData.userInfo.saveName=res.data.result.user.name
+              }
+            })
+            that.init()
+          }
+        }
+      })
+    }
+
+    init(){
+      api.getactivetest((res)=>{
+        this.setData({
+          coverImage:res.data.result.test.coverImageUrl
+        })
+        this.coverImage=res.data.result.test.coverImageUrl
+        wx.setStorageSync('coverImageUrl', this.coverImage)
+        this.$parent.globalData.questions=res.data.result.test.questions
+        this.$parent.globalData.testId=res.data.result.test.id
+        this.$parent.globalData.allowGoBack=res.data.result.test.allowGoBack
+        this.$parent.globalData.allowSkip=res.data.result.test.allowSkip
+        if(res.data.result.test.isTested&&!this.again){
+          wx.showModal({
+            title: '提示',
+            content: '你已经参加过测试，是否查看结果？',
+            cancelText:'重新测试',
+            confirmText:'查看结果',
+            success: function(res) {
+              if (res.confirm) {
+                wx.navigateTo({
+                  url: 'result'
+                })
+              } else if (res.cancel) {
+                console.log('用户点击取消')
+              }
+            }
+          })
+        }
+      })
+    }
+  }
+</script>
