@@ -105,7 +105,7 @@
         wx.hideLoading()
         if(res.data.success){
           wx.navigateTo({
-              url: 'result'
+              url: 'result?userTestId='+this.$parent.globalData.userTestId
             })
         }
       })

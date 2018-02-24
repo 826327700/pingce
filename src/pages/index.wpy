@@ -91,6 +91,7 @@
             that.$parent.globalData.userCode = res.code
             api.wxlogin({code:that.$parent.globalData.userCode},(res)=>{
               if(res.data.result.user.hasSavedName){
+                that.$parent.globalData.userInfo.userId=res.data.result.user.id
                 that.$parent.globalData.userInfo.saveName=res.data.result.user.name
               }
             })
@@ -101,7 +102,11 @@
     }
 
     init(){
+      wx.showLoading({
+          title: '初始化...',
+        })
       api.getactivetest((res)=>{
+        wx.hideLoading()
         this.setData({
           coverImage:res.data.result.test.coverImageUrl
         })
@@ -111,7 +116,9 @@
         this.$parent.globalData.testId=res.data.result.test.id
         this.$parent.globalData.allowGoBack=res.data.result.test.allowGoBack
         this.$parent.globalData.allowSkip=res.data.result.test.allowSkip
+        this.$parent.globalData.userTestId=res.data.result.test.recentUserTestId
         if(res.data.result.test.isTested&&!this.again){
+          var userTestId=this.$parent.globalData.userTestId
           wx.showModal({
             title: '提示',
             content: '你已经参加过测试，是否查看结果？',
@@ -120,7 +127,7 @@
             success: function(res) {
               if (res.confirm) {
                 wx.navigateTo({
-                  url: 'result'
+                  url: 'result?userTestId='+userTestId
                 })
               } else if (res.cancel) {
                 console.log('用户点击取消')

@@ -55,3 +55,14 @@ export const saveuserinfo=(data,cb)=>{
 
     })
 }
+
+//获取评测结果
+export const gettestresult=(data,cb)=>{
+    http('/test/gettestresult',data)
+    .then((res)=>{
+        cb(res)
+    })
+    .catch((error)=>{
+
+    })
+}

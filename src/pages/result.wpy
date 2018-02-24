@@ -12,7 +12,7 @@
   }
   .bg-wrap1{
       width: 100%;
-      height: 460rpx;
+      height: 360rpx;
       background: linear-gradient(to bottom right, #93b3f7 , #797fe9);
       color: #fff;
       text-align: center;
@@ -63,7 +63,7 @@
   .bg-wrap3{
       position: relative;
       margin-top: 60rpx;
-      min-height: 200rpx;
+      min-height: 400rpx;
       background: #fff;
       .title{
           display: inline;
@@ -139,6 +139,19 @@
           color: #fff;
       }
   }
+  .button-wrap2{
+      margin-top: 40rpx;
+      display: flex;
+      padding: 0 30rpx;
+      button{
+          width: 100%;
+          background: linear-gradient(to bottom right, #93b3f7 , #797fe9);
+      }
+      .button{
+          background: #93bdf7;
+          color: #fff;
+      }
+  }
 </style>
 <template>
   <view class="bg {{deviceInfo=='iPhone X'?'iphonex':''}}">
@@ -146,9 +159,9 @@
           <view class="title">
               <text>评测结果解读</text>
           </view>
-          <view class="desc">
+          <!-- <view class="desc">
               <text>巴拉巴拉的小描述啊小描述，巴拉巴拉的小描述啊小描述，巴拉巴拉的小描述啊小描述，巴拉巴拉的小描述啊小描述，巴拉巴拉的小描述啊小描述，</text>
-          </view>
+          </view> -->
       </view>
       <view class="bg-wrap2">
           <view class="avatar">
@@ -158,104 +171,46 @@
               <text>{{userInfo.nickName}}</text>
           </view>
       </view>
-      <view class="bg-wrap3">
+      <view class="bg-wrap3" wx:for="{{result.items}}" wx:key="title">
           <view class="title">
-              职业兴趣
+              {{item.title}}
           </view>
           <view class="charts">
-              <canvas canvas-id="canvas1" disable-scroll="true" class="canvas"></canvas>
-              <view class="canvas-text">你的职业兴趣是：<span>ARI管理型</span></view>
+              <canvas canvas-id="canvas{{index}}" disable-scroll="true" class="canvas"></canvas>
+              <view class="canvas-text">{{item.description?item.description:''}}</view>
           </view>
-          <view class="text-wrap">
+          <view class="text-wrap" wx:for="{{item.analyses}}" wx:key="*this" wx:for-item="analyse">
               <view class="text-title">
-                  <view class="dot"></view>解读结果
+                  <view class="dot"></view>{{analyse.title}}
               </view>
-              <view class="text-content">
-                  要是两年前,实现“兼容性的渐变效果”这个说法估计不会被提出来的,那个时候,说起渐变背景,想到的多半是IE的渐变滤镜,其他浏览器尚未支持,但是,在对CSS3支持日趋
-              </view>
-              <view class="text-content">
-                  要是两年前,实现“兼容性的渐变效果”这个说法估计不会被提出来的,那个时候,说起渐变背景,想到的多半是IE的渐变滤镜,其他浏览器尚未支持,但是,在对CSS3支持日趋
-              </view>
-              <view class="text-content">
-                  要是两年前,实现“兼容性的渐变效果”这个说法估计不会被提出来的,那个时候,说起渐变背景,想到的多半是IE的渐变滤镜,其他浏览器尚未支持,但是,在对CSS3支持日趋
-              </view>
-          </view>
-          <view class="text-wrap">
-              <view class="text-title">
-                  <view class="dot"></view>推荐工作
-              </view>
-              <view class="text-content">
+              <view class="text-content" wx:for="{{analyse.details}}" wx:key="*this" wx:for-item="detail">
                   <view class="sub-title">
-                      室内装潢设计
+                      {{detail.name}}
                   </view>
                   <view>
-                      用手用心做出的设计，每天都能投身于美的怀抱！
-                  </view>
-                  <view class="sub-title">
-                      室内装潢设计
-                  </view>
-                  <view>
-                      用手用心做出的设计，每天都能投身于美的怀抱！
+                      {{detail.description}}
                   </view>
               </view>
           </view>
+          
       </view>
 
-      <view class="bg-wrap3">
-          <view class="title">
-              家庭环境
-          </view>
-          <view class="charts">
-              <canvas canvas-id="canvas2" disable-scroll="true" class="canvas"></canvas>
-          </view>
-          <view class="text-wrap">
-              <view class="text-title">
-                  <view class="dot"></view>指数解读
-              </view>
-              <view class="text-content">
-                  <view class="sub-title">
-                      亲密度（46.32分）
-                  </view>
-                  <view>
-                      用手用心做出的设计，每天都能投身于美的怀抱！
-                  </view>
-                  <view class="sub-title">
-                      亲密度（46.32分）
-                  </view>
-                  <view>
-                      用手用心做出的设计，每天都能投身于美的怀抱！
-                  </view>
-                  <view class="sub-title">
-                      亲密度（46.32分）
-                  </view>
-                  <view>
-                      用手用心做出的设计，每天都能投身于美的怀抱！
-                  </view>
-                  <view class="sub-title">
-                      亲密度（46.32分）
-                  </view>
-                  <view>
-                      用手用心做出的设计，每天都能投身于美的怀抱！
-                  </view>
-                  <view class="sub-title">
-                      亲密度（46.32分）
-                  </view>
-                  <view>
-                      用手用心做出的设计，每天都能投身于美的怀抱！
-                  </view>
-              </view>
-          </view>
-      </view>
-
-      <view class="button-wrap">
+      
+        <block wx:if="{{!loading}}">
+      <view class="button-wrap" wx:if="{{isSelf}}">
           <button class="button1" bindtap="again">再测一次</button>
           <button class="button2" open-type="share">分享结果</button>
       </view>
+      <view class="button-wrap2" wx:if="{{!isSelf}}">
+          <button class="button" bindtap="goIndex">我也要测</button>
+      </view>
+      </block>
   </view>
 </template>
 
 <script>
   import wepy from 'wepy'
+  import * as api from '../api/api.js'
   var wxCharts = require('../components/wx-charts.js');
 
   export default class Index extends wepy.page {
@@ -269,6 +224,10 @@
     data = {
       deviceInfo:null,
       userInfo:null,
+      userTestId:null,
+      isSelf:false,
+      result:null,
+      loading:true,
     }
 
     methods = {
@@ -278,58 +237,40 @@
     events = {
     }
 
-    onLoad() {
-      this.deviceInfo=this.$parent.globalData.deviceInfo
-      this.userInfo=this.$parent.globalData.userInfo
-      console.log(this.userInfo)
-      new wxCharts({
-        canvasId: 'canvas1',
-            type: 'radar',
-            categories: ['C 传统型', 'R 现实型', 'I 研究型', 'E 管理型', 'S 社会型', 'A 艺术型'],
-            series: [{
-                name: '数值结果展示',
-                data: [90, 110, 125, 95, 87, 122]
-            }],
-            width: wx.getSystemInfoSync().windowWidth,
-            height: 250,
-            extra: {
-                radar: {
-                    max: 150,
-                }
-            },
-        });
-        new wxCharts({
-        canvasId: 'canvas2',
-            type: 'radar',
-            categories: ['C 传统型', 'R 现实型', 'I 研究型', 'E 管理型', 'S 社会型', 'A 艺术型'],
-            series: [{
-                name: '数值结果展示',
-                data: [90, 110, 125, 95, 87, 122]
-            }],
-            width: wx.getSystemInfoSync().windowWidth,
-            height: 250,
-            extra: {
-                radar: {
-                    max: 150,
-                }
-            },
-        });
+    onLoad(params) {
+        this.userTestId=params.userTestId
+        this.deviceInfo=this.$parent.globalData.deviceInfo
+        this.userInfo=this.$parent.globalData.userInfo
+        this.getResult()
     }
 
     onShareAppMessage(res){
         if (res.from === 'button') {
-        // 来自页面内转发按钮
-        console.log(res.target)
+            // 来自页面内转发按钮
+            console.log(res.target)
         }
         return {
-        title: '自定义转发标题',
-        path: '/pages/index?id=123',
-        success: function(res) {
-            // 转发成功
-        },
-        fail: function(res) {
-            // 转发失败
-        }
+            title: this.$parent.globalData.userInfo.saveName+'的测试结果',
+            path: '/pages/result?userTestId='+this.$parent.globalData.userTestId,
+            success: function(res) {
+                // 转发成功
+                wx.showToast({
+                    title: '分享成功',
+                    icon: 'success',
+                    duration: 2000
+                })
+            },
+            fail: function(res) {
+                if(res.errMsg=='shareAppMessage:fail cancel'){
+                    return false
+                }
+                // 转发失败
+                wx.showToast({
+                    title: '分享失败，请重试',
+                    icon: 'none',
+                    duration: 2000
+                })
+            }
         }
     }
 
@@ -337,6 +278,68 @@
         wx.reLaunch({
             url:'index?again=true'
         })
+    }
+
+    getResult(){
+        wx.showLoading({
+          title: '获取结果...',
+        })
+        this.loading=true
+        api.gettestresult({userTestId:this.userTestId},(res)=>{
+            this.loading=false
+            wx.hideLoading()
+            this.setData({
+                result:res.data.result.testResult
+            })
+            this.result=res.data.result.testResult
+            
+            //按组绘制雷达图
+            this.result.items.forEach((item,index)=>{
+                let el='canvas'+index
+                let radarParams=item.radarParams
+                radarParams.radarMaxValue=item.radarMaxValue
+                this.drawCharts(el,radarParams)
+            })
+            
+            if(res.data.result.testResult.userId==this.userInfo.userId){
+                this.isSelf=true
+            }else{
+                this.isSelf=false
+            }
+        })
+    }
+
+    goIndex(){
+        wx.redirectTo({
+            url: 'index'
+        })
+    }
+
+    drawCharts(el,radarParams){
+        console.log(el)
+        console.log(radarParams)
+        let categories=radarParams.map(item=>{
+            return item.name
+        })
+        let seriesData=radarParams.map(item=>{
+            return item.value
+        })
+        new wxCharts({
+            canvasId: el,
+            type: 'radar',
+            categories: categories,
+            series: [{
+                name: '数值结果展示',
+                data: seriesData
+            }],
+            width: wx.getSystemInfoSync().windowWidth,
+            height: 250,
+            extra: {
+                radar: {
+                    max: radarParams.radarMaxValue,
+                }
+            },
+        });
     }
   }
 </script>
