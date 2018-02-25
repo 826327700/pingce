@@ -2,7 +2,7 @@
    
   .bg-wrap{
     height: 100%;
-    width: 100%;
+    min-width: 100%;
   }
   .form-card{
       position: absolute;
@@ -55,9 +55,9 @@
             <text>留下你的姓名</text>
         </view>
         
-        <input placeholder="姓名" value="{{name}}" disabled="{{name?true:false}}" name="userName" cursor-spacing="100" class="input"/>
+        <input placeholder="姓名" value="{{name}}" bindinput="inputChange" disabled="{{name?true:false}}" name="userName" cursor-spacing="100" class="input"/>
         
-        <button class="button" formType="submit">查看结果</button>
+        <button class="button" formType="submit" disabled="{{buttonDisabled}}">查看结果</button>
       </form>
     </view>
   </view>
@@ -77,7 +77,8 @@
 
     data = {
       deviceInfo:null,
-      name:''
+      name:'',
+      buttonDisabled:true,
     }
 
     methods = {
@@ -91,6 +92,7 @@
       let self = this
       if(this.$parent.globalData.userInfo.saveName){
         this.name=this.$parent.globalData.userInfo.saveName
+        this.buttonDisabled=false
       }
       this.$parent.getDeviceModel(function (deviceInfo) {
         self.deviceInfo=deviceInfo
@@ -109,6 +111,14 @@
             })
         }
       })
+    }
+
+    inputChange(e){
+      if(e.detail.value!=''){
+        this.buttonDisabled=false
+      }else{
+        this.buttonDisabled=true
+      }
     }
   }
 </script>

@@ -26,7 +26,7 @@
   <view class="container {{deviceInfo=='iPhone X'?'iphonex':''}}">
     <image class="bg-wrap" src="{{coverImage}}"></image>
     <view class="button-wrap">
-      <button class="button" bindtap="startDati">开始评测</button>
+      <button class="button" bindtap="startDati" wx:if="{{!hideButton}}">开始评测</button>
     </view>
   </view>
 </template>
@@ -46,7 +46,8 @@
     data = {
       deviceInfo:null,
       coverImage:wx.getStorageSync('coverImageUrl'),
-      again:false
+      again:false,
+      hideButton:true
     }
 
     methods = {
@@ -90,8 +91,8 @@
           if(res.code){
             that.$parent.globalData.userCode = res.code
             api.wxlogin({code:that.$parent.globalData.userCode},(res)=>{
+              that.$parent.globalData.userInfo.userId=res.data.result.user.id
               if(res.data.result.user.hasSavedName){
-                that.$parent.globalData.userInfo.userId=res.data.result.user.id
                 that.$parent.globalData.userInfo.saveName=res.data.result.user.name
               }
             })
@@ -102,14 +103,29 @@
     }
 
     init(){
+      var that=this
       wx.showLoading({
           title: '初始化...',
         })
       api.getactivetest((res)=>{
         wx.hideLoading()
+        if(!res.data.result.test){
+          wx.showModal({
+            title: '提示',
+            content: '没有有效的评测问卷，请稍后再试!',
+            showCancel:false,
+            confirmText:'确定',
+            success: function(res) {
+              
+            }
+          })
+          return false
+        }
         this.setData({
-          coverImage:res.data.result.test.coverImageUrl
+          coverImage:res.data.result.test.coverImageUrl,
+          hideButton:false
         })
+        this.hideButton=false
         this.coverImage=res.data.result.test.coverImageUrl
         wx.setStorageSync('coverImageUrl', this.coverImage)
         this.$parent.globalData.questions=res.data.result.test.questions
@@ -130,7 +146,7 @@
                   url: 'result?userTestId='+userTestId
                 })
               } else if (res.cancel) {
-                console.log('用户点击取消')
+                that.startDati()
               }
             }
           })
