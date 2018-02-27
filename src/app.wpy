@@ -24,7 +24,6 @@ export default class extends wepy.app {
       'pages/dati',
       'pages/complate',
       'pages/result',
-      'pages/sharepage',
     ],
     window: {
       backgroundTextStyle: 'light',
