@@ -11,9 +11,16 @@ const http=(url='',data={})=>{
             },
             success: (res)=> {
                 resolve(res)
-                if(!res.data.success){
+                if(res.statusCode==200&&!res.data.success){
                     wx.showToast({
-                        title: res.data.error.message||"网络错误",
+                        title: res.data.error.message,
+                        icon: 'none',
+                        duration: 2000
+                    })
+                }
+                if(res.statusCode!=200){
+                    wx.showToast({
+                        title: '服务器错误：'+res.statusCode,
                         icon: 'none',
                         duration: 2000
                     })
