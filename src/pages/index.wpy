@@ -76,7 +76,7 @@
           if(res.data.result.userTestId){
             this.$parent.globalData.userTestId=res.data.result.userTestId
             wx.navigateTo({
-              url: 'result'//'dati'
+              url: 'dati'
             })
           }
         })

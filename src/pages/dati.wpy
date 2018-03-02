@@ -139,6 +139,9 @@ page{height:100%;overflow: hidden}
 .card.leave .number{
     opacity: 0;
 }
+.card.leave-prev .number{
+    opacity: 0;
+}
 .iphonex{
     .progress-wrap{
         bottom: 100rpx;
@@ -252,14 +255,12 @@ export default class Index extends wepy.page {
   onShow() {}
   nextPage(){
       this.move=true
+      setTimeout(() => {
+          this.move=false
+      }, 400);
       if(this.questions.currentIndex>=this.questions.data.length-1){
           return false
       }
-      setTimeout(() => {
-          this.move=false
-          var n=this.questions.horn++
-      }, 400);
-      
       this.questions.currentIndex++
       this.questions.progress=(this.questions.currentIndex/this.questions.data.length)*100
       this.setQuestions(this.questions.currentIndex)
@@ -291,13 +292,12 @@ export default class Index extends wepy.page {
   prevPage(){
       var that=this
       this.move=true
-      if(this.questions.currentIndex==0){
-          return false
-      }
       setTimeout(() => {
           this.move=false
       }, 400);
-      
+      if(this.questions.currentIndex==0){
+          return false
+      }
       this.questions.currentIndex--
       this.setQuestions(this.questions.currentIndex)
       if(this.card1=='current'){
@@ -320,7 +320,7 @@ export default class Index extends wepy.page {
           this.card1='enter-prev'
           this.card2='current'
           this.card3='leave-prev'
-          this.questions.current=this.questions.data[this.questions.currentIndex]
+          this.questions.next=this.questions.data[this.questions.currentIndex]
           this.questions.prev=this.questions.data[this.questions.currentIndex+1]
           return false
       }
@@ -356,10 +356,15 @@ export default class Index extends wepy.page {
       this.questions.next=this.questions.data[i-1]
   }
   setAnswer(e){
+      console.log(this.move)
       if(this.move){
           return false
       }
       let i=this.questions.currentIndex
+      let arrStr=`questions.data[${i}].answerId`
+      let param = {};
+      param[arrStr]=e.currentTarget.dataset.wpysetanswerA
+      this.setData(param)
       this.questions.data[i].answerId=e.currentTarget.dataset.wpysetanswerA
       this.nextPage()
       if(i==this.questions.data.length-1){
