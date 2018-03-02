@@ -7,7 +7,7 @@ const http=(url='',data={})=>{
             method:'POST',
             header: {
                 'Content-Type': 'application/json', // 默认值
-                'Authentication':wx.getStorageSync('token')?wx.getStorageSync('token'):''
+                'Authorization':wx.getStorageSync('token')?wx.getStorageSync('token'):''
             },
             success: (res)=> {
                 resolve(res)

@@ -183,13 +183,8 @@
               <view class="text-title">
                   <view class="dot"></view>{{analyse.title}}
               </view>
-              <view class="text-content" wx:for="{{analyse.details}}" wx:key="*this" wx:for-item="detail">
-                  <view class="sub-title">
-                      {{detail.name}}
-                  </view>
-                  <view>
-                      {{detail.description}}
-                  </view>
+              <view class="text-content">
+                  <text>{{analyse.details}}</text>
               </view>
           </view>
           
@@ -316,8 +311,6 @@
     }
 
     drawCharts(el,radarParams){
-        console.log(el)
-        console.log(radarParams)
         let categories=radarParams.map(item=>{
             return item.name
         })
