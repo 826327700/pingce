@@ -76,7 +76,7 @@
           if(res.data.result.userTestId){
             this.$parent.globalData.userTestId=res.data.result.userTestId
             wx.navigateTo({
-              url: 'dati'
+              url: 'complate'
             })
           }
         })
@@ -122,7 +122,7 @@
           return false
         }
         this.setData({
-          coverImage:res.data.result.test.coverImageUrl,
+          coverImage:'https://test-api-survey.ibaizhi.com'+res.data.result.test.coverImageUrl,
           hideButton:false
         })
         this.hideButton=false
