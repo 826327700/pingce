@@ -126,7 +126,7 @@
           hideButton:false
         })
         this.hideButton=false
-        this.coverImage=res.data.result.test.coverImageUrl
+        this.coverImage='https://test-api-survey.ibaizhi.com'+res.data.result.test.coverImageUrl
         wx.setStorageSync('coverImageUrl', this.coverImage)
         this.$parent.globalData.questions=res.data.result.test.questions
         this.$parent.globalData.testId=res.data.result.test.id
