@@ -20,6 +20,9 @@
         background-color: #93b3f7;
         color: #fff;
         margin-top: 40rpx;
+        &::after{
+          border: 0px solid #fff
+        }
       }
       .input{
           width: 100%;

@@ -129,14 +129,23 @@
       button{
           width: 45%;
           background: linear-gradient(to bottom right, #93b3f7 , #797fe9);
+          &::after{
+            border: 0px solid #fff
+        }
       }
       .button1{
           background: #93bdf7;
           color: #fff;
+          &::after{
+          border: 0px solid #fff
+        }
       }
       .button2{
           background: #91a0ee;
           color: #fff;
+          &::after{
+          border: 0px solid #fff
+        }
       }
   }
   .button-wrap2{
@@ -150,6 +159,9 @@
       .button{
           background: #93bdf7;
           color: #fff;
+          &::after{
+          border: 0px solid #fff
+        }
       }
   }
 </style>
