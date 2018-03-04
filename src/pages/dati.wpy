@@ -97,9 +97,9 @@ page{height:100%;overflow: hidden}
         border-radius: 50%;
         .number{
             width:80rpx;
-            height: 100rpx;
+            height: 80rpx;
             position: absolute;
-            bottom: 0;
+            bottom: 20rpx;
             right: 20rpx;
             display: flex;
             justify-content: center;
