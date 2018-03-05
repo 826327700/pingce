@@ -88,9 +88,14 @@
       let that=this
       wx.login({
         success: function(res) {
+          console.log(that.$parent.globalData.userInfo)
           if(res.code){
             that.$parent.globalData.userCode = res.code
-            api.wxlogin({code:that.$parent.globalData.userCode},(res)=>{
+            let params={
+              code:that.$parent.globalData.userCode,
+              avatarUrl:that.$parent.globalData.userInfo.avatarUrl
+            }
+            api.wxlogin(params,(res)=>{
               that.$parent.globalData.userInfo.userId=res.data.result.user.id
               if(res.data.result.user.hasSavedName){
                 that.$parent.globalData.userInfo.saveName=res.data.result.user.name

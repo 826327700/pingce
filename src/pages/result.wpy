@@ -180,7 +180,7 @@
               <image src="{{userInfo.avatarUrl}}"></image>
           </view>
           <view class="nickName">
-              <text>{{userInfo.nickName}}</text>
+              <text>{{userInfo.saveName?userInfo.saveName:userInfo.nickName}}</text>
           </view>
       </view>
       <view class="bg-wrap3" wx:for="{{result.items}}" wx:key="title">
