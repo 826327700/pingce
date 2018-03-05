@@ -93,6 +93,7 @@
             that.$parent.globalData.userCode = res.code
             let params={
               code:that.$parent.globalData.userCode,
+              name:that.$parent.globalData.userInfo.nickName,
               avatarUrl:that.$parent.globalData.userInfo.avatarUrl
             }
             api.wxlogin(params,(res)=>{

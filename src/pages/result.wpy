@@ -177,10 +177,10 @@
       </view>
       <view class="bg-wrap2">
           <view class="avatar">
-              <image src="{{userInfo.avatarUrl}}"></image>
+              <image src="{{user.userAvatar}}"></image>
           </view>
           <view class="nickName">
-              <text>{{userInfo.saveName?userInfo.saveName:userInfo.nickName}}</text>
+              <text>{{user.userName}}</text>
           </view>
       </view>
       <view class="bg-wrap3" wx:for="{{result.items}}" wx:key="title">
@@ -234,6 +234,10 @@
       userTestId:null,
       isSelf:false,
       result:null,
+      user:{
+          userName:'',
+          userAvatar:''
+      },
       loading:true,
     }
 
@@ -313,6 +317,12 @@
             }else{
                 this.isSelf=false
             }
+            this.user.userName=res.data.result.testResult.userName
+            this.user.userAvatar=res.data.result.testResult.userAvatarUrl
+            this.setData({
+                'user.userName':res.data.result.testResult.userName,
+                'user.userAvatar':res.data.result.testResult.userAvatarUrl
+            })
         })
     }
 
