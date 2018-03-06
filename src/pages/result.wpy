@@ -343,6 +343,7 @@
             canvasId: el,
             type: 'radar',
             categories: categories,
+            legend:false,
             series: [{
                 name: '数值结果展示',
                 data: seriesData
