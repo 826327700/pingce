@@ -1,5 +1,5 @@
 const http=(url='',data={})=>{
-    let baseUrl='https://test-api-survey.ibaizhi.com/api/services/wx'//'https://域名/api/services/wx'
+    let baseUrl='https://api-survey.ibaizhi.com/api/services/wx'//'https://域名/api/services/wx'
     return new Promise((resolve, reject)=>{
         wx.request({
             url: baseUrl+url, 
