@@ -222,7 +222,7 @@
 
   export default class Index extends wepy.page {
     config = {
-      navigationBarTitleText: '职业定位评测'
+      navigationBarTitleText: '职业潜能测评'
     }
     components = {
     }

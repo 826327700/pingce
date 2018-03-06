@@ -5,6 +5,7 @@ export const wxlogin=(data,cb)=>{
     http('/auth/wxlogin',data)
     .then((res)=>{
         wx.setStorageSync('token', res.data.result.token)
+        console.log(res.data.result.token)
         cb(res)
     })
     .catch((error)=>{

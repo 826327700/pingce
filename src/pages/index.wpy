@@ -37,7 +37,7 @@
 
   export default class Index extends wepy.page {
     config = {
-      navigationBarTitleText: '职业定位评测'
+      navigationBarTitleText: '职业潜能测评'
     }
     components = {
     }
@@ -57,11 +57,18 @@
     events = {
     }
     onLoad(params) {
+      var that=this
       if(params&&params.again=='true'){
         this.again=true
       }
       this.deviceInfo=this.$parent.globalData.deviceModel
-      this.login()
+      wepy.getUserInfo({
+        success (res) {
+          that.$parent.globalData.userInfo = res.userInfo
+          that.login()
+        }
+      })
+      
     }
 
     startDati(){
@@ -98,11 +105,12 @@
             }
             api.wxlogin(params,(res)=>{
               that.$parent.globalData.userInfo.userId=res.data.result.user.id
+              that.init()
               if(res.data.result.user.hasSavedName){
                 that.$parent.globalData.userInfo.saveName=res.data.result.user.name
               }
             })
-            that.init()
+            
           }
         }
       })
