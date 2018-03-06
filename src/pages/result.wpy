@@ -78,13 +78,14 @@
           font-size: 30rpx;
       }
       .charts{
-          padding: 40rpx 0;
+          padding: 40rpx 0 20rpx 0;
           .canvas{
               width: 100%;
               height: 250px;
               
           }
           .canvas-text{
+              margin-top: 20rpx;
               padding: 0 40rpx;
                   font-size: 32rpx;
                   span{
@@ -94,7 +95,6 @@
       }
       .text-wrap{
           padding: 20rpx 40rpx 20rpx 80rpx;
-          
           .text-title{
               font-size: 32rpx;
               position: relative;
@@ -189,7 +189,7 @@
           </view>
           <view class="charts">
               <canvas canvas-id="canvas{{index}}" disable-scroll="true" class="canvas"></canvas>
-              <view class="canvas-text">{{item.description?item.description:''}}</view>
+              <view class="canvas-text" wx:if="{{item.description}}">{{item.description?item.description:''}}</view>
           </view>
           <view class="text-wrap" wx:for="{{item.analyses}}" wx:key="*this" wx:for-item="analyse">
               <view class="text-title">

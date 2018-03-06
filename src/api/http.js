@@ -1,7 +1,6 @@
 const http=(url='',data={})=>{
     let baseUrl='https://api-survey.ibaizhi.com/api/services/wx'//'https://域名/api/services/wx'
     return new Promise((resolve, reject)=>{
-        console.log(wx.getStorageSync('token'))
         wx.request({
             url: baseUrl+url, 
             data: data,

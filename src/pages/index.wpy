@@ -95,7 +95,6 @@
       let that=this
       wx.login({
         success: function(res) {
-          console.log(that.$parent.globalData.userInfo)
           if(res.code){
             that.$parent.globalData.userCode = res.code
             let params={
